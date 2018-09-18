@@ -35,6 +35,15 @@ func sliceSubtract(a1, a2 []string) []string {
 	return a
 }
 
+func sliceContains(a1 string, a2 []string) bool {
+	for _, b := range a2 {
+		if b == a1 {
+			return true
+		}
+	}
+	return false
+}
+
 func stringMapSubtract(m1, m2 map[string]string) map[string]string {
 	m := map[string]string{}
 
