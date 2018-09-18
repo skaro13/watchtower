@@ -83,7 +83,7 @@ func (c Container) Enabled() (bool, bool) {
 }
 
 // Links returns a list containing the names of all the containers to which
-// this container is linked.
+// this container is linked including via the network stack.
 func (c Container) Links() []string {
 	var links []string
 
@@ -91,6 +91,13 @@ func (c Container) Links() []string {
 		for _, link := range c.containerInfo.HostConfig.Links {
 			name := strings.Split(link, ":")[0]
 			links = append(links, name)
+		}
+
+		if c.containerInfo.HostConfig.NetworkMode.IsContainer() {
+			networkContainer := c.containerInfo.HostConfig.NetworkMode.ConnectedContainer()
+			if sliceContains(networkContainer, links) {
+				links = append(links, networkContainer)
+			}
 		}
 	}
 
